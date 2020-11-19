@@ -1,14 +1,14 @@
 <template>
-  <div class="test">
+  <div id="app">
     <h1 class="title">Teste paginação</h1>
     <div class="list">
-      <div v-for="item in results" :key="item._id" class="card">
-        <strong>{{ item.name }}</strong>
-        <span class="tag">{{ item.trips }}</span>
+      <div v-for="passenger in passengers" :key="passenger._id" class="card">
+        <strong>{{ passenger.name }}</strong>
+        <span class="tag">{{ passenger.trips }}</span>
       </div>
     </div>
     <pagination
-      v-if="results.length"
+      v-if="passengers.length"
       :offset="offset"
       :total="total"
       :limit="limit"
@@ -29,10 +29,10 @@ export default {
   },
   data() {
     return {
-      results: [],
+      passengers: [],
       offset: 0,
       total: 0,
-      limit: 40,
+      limit: 50,
     };
   },
   methods: {
@@ -41,21 +41,16 @@ export default {
       this.getPassengers();
     },
     getPassengers() {
-      const url = `https://api.instantwebtools.net/v1/passenger?page=${this.offset}&size=${this.limit}`;
+      const BASE_URL = 'https://api.instantwebtools.net';
+      const url = `${BASE_URL}/v1/passenger?page=${this.offset}&size=${this.limit}`;
 
-      axios
-        .get(url)
-        .then(({ data }) => {
-          this.results = data.data;
-          this.total = data.totalPassengers;
-        })
-        .catch(function (error) {
-          // handle error
-          console.log(error);
-        });
+      axios.get(url).then(({ data }) => {
+        this.passengers = data.data;
+        this.total = data.totalPassengers;
+      });
     },
   },
-  async created() {
+  created() {
     this.getPassengers();
   },
 };

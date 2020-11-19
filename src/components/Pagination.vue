@@ -1,25 +1,30 @@
 <template>
   <div class="pagination">
-    <span v-if="showPrevious" class="item prev" @click="changePage(current - 1)"
-      >&laquo;</span
+    <button
+      v-if="showPrevious"
+      class="item prev"
+      @click="changePage(current - 1)"
     >
-    <span
-      v-for="page in pages"
+      &laquo;
+    </button>
+    <button
+      v-for="(page, index) in pages"
       :key="page"
       class="item"
       :class="{ current: page === current }"
-      @click="changePage(page)"
-      >{{ page }}</span
+      @click="changePage(index)"
     >
-    <span v-if="showNext" class="item next" @click="changePage(current + 1)"
-      >&raquo;</span
-    >
+      {{ page }}
+    </button>
+    <button v-if="showNext" class="item next" @click="changePage(current + 1)">
+      &raquo;
+    </button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'IxPagination',
+  name: 'Pagination',
   props: {
     offset: {
       type: [String, Number],
@@ -49,12 +54,12 @@ export default {
 
       if (qty <= 1) return [1];
 
-      return Array.from(Array(qty).keys()).map((i) => i + 1);
+      return Array.from(Array(qty).keys(), (i) => i + 1);
     },
   },
   methods: {
-    changePage(page) {
-      this.$emit('change-page', page - 1);
+    changePage(offset) {
+      this.$emit('change-page', offset);
     },
   },
 };
